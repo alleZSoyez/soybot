@@ -11,9 +11,10 @@
 # delete my last message because APPARENTLY NORMAL USERS CAN'T DO THAT LIKE ON MIXER AAAAAAAAAAAAAAAAA
 # timed messages need to be independent of listening for messages AND not hold up the entire program aaaaaaAAAAAAAA
 # quote db because i'm tired of scorpbot
-# maybe the bot shouldn't run noping when someone else is running a command (like quotes)
+# maybe the bot shouldn't run NoPing when someone else is running a command (like quotes)
 # actually the incoming message handing in general is... y i k e s
 # "oh boy 3 am" command needs to ask for time zone on boot (default to system time zone)
+# !host command so i dont have to go back to my own channel...
 
 import time
 import re
@@ -32,7 +33,7 @@ timerlist = [
     "I don't know why you'd want to do this, but here's alleZSoyez's Twitter if you'd like to follow them: https://twitter.com/alleZSoyez",
     "Stream archives and various cringe: https://www.youtube.com/channel/UCIYXXmcyfdyNgxF-oBMP3dw",
     "You can type !quote to show a random quote. Just beware of mature content.",
-    "It's not expected or required, but if you'd like to support these streams... https://allezsoyez.streamjar.gg/tip"
+    "It's not expected or required, but if you'd like to support this stream, you can! https://rainmaker.gg/allezsoyez/tip"
 ]
 
 timedmsgcount = int(len(timerlist))
@@ -164,7 +165,7 @@ def main():
 
                         if ( cutematch.match(incomingmsg) ):
                             irc.sendmsg("CS is really cute! <3")
-
+    
 
                     ######## VERY sloppy giveaway tool
                     def giveaway():
@@ -231,6 +232,14 @@ def main():
                         if (backseatmatch.match(incomingmsg)):
                             irc.sendmsg("NO BACKSEAT GAMING!")
 
+
+                    ######## NO BACKSEAT GAMING! (!backseat OR !bsg)
+                    def famfren():
+                        fammatch = re.compile("^!(ff)$", re.IGNORECASE)
+
+                        if (fammatch.match(incomingmsg)):
+                            irc.sendmsg("REMINDER: THIS IS A FAMILY FRIENDLY STREAM!")
+
                     ################# END MANUAL BOT COMMANDS #################
 
                     # multithreading?? i've gone mad!
@@ -239,6 +248,8 @@ def main():
                     threading.Thread(name='givewaway', target=giveaway, daemon=True).start()
                     threading.Thread(name='countdown', target=countdown, daemon=True).start()
                     threading.Thread(name='backseatgaming', target=backseatgaming, daemon=True).start()
+                
+                    threading.Thread(name='famfren', target=famfren, daemon=True).start()
 
                     if nopingconfirm == "y":
                         threading.Thread(name='noping', target=noping, daemon=True).start()
